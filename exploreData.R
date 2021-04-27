@@ -24,3 +24,26 @@ View(data)
   # Change numerics to categorical
   # Clustering? 
   # Random Forest? 
+
+cps <- cps[!is.na(cps$fsecurity),]
+# THIS SHOULD REMOVE ALL NA's from fsecurity.
+
+# WE ALSO NEED TO REMOVE THE X.1, X, and ID rows from the dataset
+# THEY ARE NOT NEEDED
+# SHOULD I REMOVE THEM FROM THE TRAINING DATASET OR FROM THE DATASET ENTIRELY?
+cps2 = subset(cps, select = -c(X.1, X, id))
+
+# WANT TO LOOK AT THE VARIABLES
+# SINCE THEY ARE ALL CATEGORICAL I WILL LOOK AT THE HISTOGRAMS
+
+# NEED TO FIX THESE, AND CHANGE CERTAIN VARIABLES TO CATEGORICAL.
+cps2 <- within(cps2, {
+  disability.cat <- NA # need to initialize variable
+  disability.cat[disability = 0] <- "No_Disability"
+  disability.cat[disability = 1] <- "Disability"
+} )
+
+cps2$Income.cat <- factor(cps2$Income.cat, levels = c("No_Disability", "Disability"))
+
+cps2$fsecurity_cat = ifelse(fsecurity > 0, "yes", "no")
+cps2$fsecurity_cat = as.factor(cps2$fsecurity_cat)
